@@ -1,0 +1,9 @@
+.just {
+    text-align: justify;
+    text-justify: inter-word;
+    width: 45%;
+}
+h2 a:hover{
+    color: white;
+    text-decoration: none;
+}
