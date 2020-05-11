@@ -1,0 +1,133 @@
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="Vue.css">
+    <title> TodoList </title>
+</head>
+
+<body>
+    <div id="app" class="bg-light h-100">
+        <div class="container-fluid bg-dark mb-5">
+            <div class="nav navbar justify-content-center">
+                <h2><a href="vue.html" class="pr-3">ToDo List</a></h2>
+                <img class="navbar-brand" src="todo-list.png" height="40px" width="40px">
+            </div>
+        </div>
+
+        <div class="container bg-warning w-70">
+            <div class="todo justify-content-center">
+                <fieldset class="text-left">
+                    <h1 class="text-left">
+                        Todo List
+                        <span class="btn-pos"><button class="btn btn-sm-4 mt-2 btn-secondary float-right font-weight-bold" :disabled="tasks.length<=1" @click.prevent="deleteAll">Delete All</button></span>
+                        <span class="btn-pos"><button class="btn btn-sm-4 mt-2 btn-secondary mr-2 float-right font-weight-bold" data-toggle="modal" data-target="#Ftasks" :disabled="tasks.length<=1" @click.prevent="finished">Finished Tasks</button></span>
+                        <span class="btn-pos"><button class="btn btn-sm-4 mt-2 btn-secondary mr-2 float-right font-weight-bold" data-toggle="modal" data-target="#Uftasks" :disabled="tasks.length<=1" @click.prevent="finished">Unfinished Tasks</button></span>
+                    </h1>
+                    <p class="font-weight-bold">
+                        All your Tasks will be achieved.
+                    </p>
+                        
+                        <div id="Ftasks" role="dialog" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Unfinished Tasks</h4>
+                                    </div>
+                                    <div class="modal-body bg-light">
+                                        <p v-for="(ftask,index) in finishedTasks">{{ index+1 }} - {{ ftask }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default bg-light font-weight-bold" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="Uftasks" role="dialog" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Finished Tasks</h4>
+                                    </div>
+                                    <div class="modal-body bg-light">
+                                        <p v-for="(uftask,index) in unfinishedTasks">{{ index+1 }} - {{ uftask }}</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default bg-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="task-box bg-dark text-white mb-2 w-45 rounded " v-for="(task,index) in tasks">
+                            <span class="font-weight-bold pl-2 just">{{ index+1 }} - {{ task.words }}</span>
+                            <span class="ml-4"><input type="checkbox" @click="task.done=!task.done"></span>
+                            <button @click.prevent="del(index)" class="btn"><span class="fa fa-trash ml-2 text-light text-right"></span></button>
+                        </div>
+
+                        <form action="">
+                            <div class="form-group mt-3">
+                                <input type="text" placeholder="Place your task" class="form-control" id="textarea" v-model="tasktext" />
+                                <button class="btn btn-secondary btn-block mt-3 text-center font-weight-bold" :disabled="!tasktext" @click.prevent="addTask">
+                                    Add Task</button>
+                            </div>
+                        </form>
+
+                </fieldset>
+            </div>
+        </div>
+    </div>
+
+    <script src="Vue.js"></script>
+
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                tasks: [],
+                finishedTasks: [],
+                unfinishedTasks: [],
+                tasktext: "",
+            },
+            methods: {
+                addTask: function() {
+                    this.tasks.push({
+                        words: this.tasktext,
+                        done: false
+                    });
+                    this.tasktext = '';
+                },
+                del: function(index) {
+                    this.tasks.splice(index, 1);
+                },
+                deleteAll: function() {
+                    this.tasks = [];
+                },
+                finished: function() {
+                    this.finishedTasks = [];
+                    this.unfinishedTasks = [];
+                    for (i = 0; i < this.tasks.length; i++) {
+                        if (this.tasks[i].done == true) {
+                            this.finishedTasks.push(this.tasks[i].words);
+                        }
+                        else this.unfinishedTasks.push(this.tasks[i].words);
+                    }
+                }
+            },
+        });
+    </script>
+
+</body>
+
+</html>
